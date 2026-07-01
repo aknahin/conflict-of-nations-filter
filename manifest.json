@@ -1,0 +1,28 @@
+{
+  "name": "Conflict of Nations Game Filter",
+  "description": "Hide game cards that do not match your active speed, age, and fill filters.",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "permissions": ["storage"],
+  "host_permissions": [
+    "*://*.conflictnations.com/*",
+    "*://conflictnations.com/*",
+    "*://*.conflict-of-nations.com/*",
+    "*://conflict-of-nations.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.conflictnations.com/*",
+        "*://conflictnations.com/*",
+        "*://*.conflict-of-nations.com/*",
+        "*://conflict-of-nations.com/*"
+      ],
+      "js": ["shared/shared.js", "content/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

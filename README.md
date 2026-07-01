@@ -21,11 +21,17 @@ Example: if `Player fill` is set to `40`, games at `40%` occupied or lower stay 
 
 ### Chrome
 
+For local development or unpacked loading from the repo:
+
+1. Open `chrome://extensions`.
+2. Enable Developer mode.
+3. Click Load unpacked and choose the repository root folder.
+
+For release builds:
+
 1. Download the Chrome build from `dist/packages/conflict-of-nations-filter-chrome.zip`.
 2. Unzip it.
-3. Open `chrome://extensions`.
-4. Enable Developer mode.
-5. Click Load unpacked and choose the unzipped `dist/chrome` folder.
+3. Load the unzipped `dist/chrome` folder.
 
 ### Firefox
 
