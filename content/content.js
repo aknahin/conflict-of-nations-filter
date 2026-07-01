@@ -39,6 +39,10 @@
         if (!message || message.type !== "conon-apply-filters") {
           return;
         }
+        if (message.filters) {
+          controller.applyFilters(message.filters);
+          return;
+        }
         controller.syncFromStorage();
       });
     }

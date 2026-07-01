@@ -23,6 +23,44 @@
     input.value = value === null || value === undefined ? "" : String(value);
   }
 
+  function getBrowserApi() {
+    return globalThis.browser || globalThis.chrome;
+  }
+
+  async function sendApplyMessage(filters) {
+    const browserApi = getBrowserApi();
+    if (!browserApi) {
+      return;
+    }
+
+    const tabsApi = browserApi.tabs;
+    if (!tabsApi || typeof tabsApi.query !== "function" || typeof tabsApi.sendMessage !== "function") {
+      return;
+    }
+
+    const queryResult = tabsApi.query({ active: true, currentWindow: true });
+    const tabs = queryResult && typeof queryResult.then === "function" ? await queryResult : await new Promise((resolve, reject) => {
+      tabsApi.query({ active: true, currentWindow: true }, (result) => {
+        const lastError = browserApi.runtime && browserApi.runtime.lastError;
+        if (lastError) {
+          reject(new Error(lastError.message));
+          return;
+        }
+        resolve(result || []);
+      });
+    });
+
+    const activeTab = tabs && tabs[0];
+    if (!activeTab || typeof activeTab.id !== "number") {
+      return;
+    }
+
+    const sendResult = tabsApi.sendMessage(activeTab.id, { type: "conon-apply-filters", filters });
+    if (sendResult && typeof sendResult.then === "function") {
+      await sendResult.catch(() => null);
+    }
+  }
+
   async function loadFilters() {
     const filters = await api.readFilters();
     setInputValue(speedInput, filters.speedMin);
@@ -38,19 +76,11 @@
         daysRunningMin: inputToNumber(daysInput),
         playerFillMax: inputToNumber(playerInput),
       });
-
-      const browserApi = globalThis.browser || globalThis.chrome;
-      if (browserApi && browserApi.runtime && typeof browserApi.runtime.sendMessage === "function") {
-        try {
-          browserApi.runtime.sendMessage({ type: "conon-apply-filters", filters });
-        } catch (error) {
-          // Ignore delivery errors; storage persistence still succeeded.
-        }
-      }
+      await sendApplyMessage(filters);
 
       setStatus("Applied.");
     } catch (error) {
-      setStatus(`Could not save filters: ${error.message}`, true);
+      setStatus(`Could not apply filters: ${error.message}`, true);
     }
   }
 

@@ -19,7 +19,7 @@ const commonManifest = {
   action: {
     default_popup: "popup/popup.html",
   },
-  permissions: ["storage"],
+  permissions: ["storage", "tabs"],
   host_permissions: [
     "*://*.conflictnations.com/*",
     "*://conflictnations.com/*",

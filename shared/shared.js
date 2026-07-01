@@ -296,6 +296,11 @@
         startObserver();
         return state.filters;
       },
+      applyFilters(nextFilters) {
+        state.filters = normalizeFilters(nextFilters);
+        scanNow();
+        return state.filters;
+      },
       async updateFilters(nextFilters) {
         state.filters = normalizeFilters(nextFilters);
         await writeFilters(state.filters);
