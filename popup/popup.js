@@ -33,12 +33,22 @@
   async function saveFilters(event) {
     event.preventDefault();
     try {
-      await api.writeFilters({
+      const filters = await api.writeFilters({
         speedMin: inputToNumber(speedInput),
         daysRunningMin: inputToNumber(daysInput),
         playerFillMax: inputToNumber(playerInput),
       });
-      setStatus("Saved.");
+
+      const browserApi = globalThis.browser || globalThis.chrome;
+      if (browserApi && browserApi.runtime && typeof browserApi.runtime.sendMessage === "function") {
+        try {
+          browserApi.runtime.sendMessage({ type: "conon-apply-filters", filters });
+        } catch (error) {
+          // Ignore delivery errors; storage persistence still succeeded.
+        }
+      }
+
+      setStatus("Applied.");
     } catch (error) {
       setStatus(`Could not save filters: ${error.message}`, true);
     }

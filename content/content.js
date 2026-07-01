@@ -32,6 +32,16 @@
       controller.applyNow();
     });
     attachStorageListener();
+
+    const browserApi = globalThis.browser || globalThis.chrome;
+    if (browserApi && browserApi.runtime && browserApi.runtime.onMessage) {
+      browserApi.runtime.onMessage.addListener((message) => {
+        if (!message || message.type !== "conon-apply-filters") {
+          return;
+        }
+        controller.syncFromStorage();
+      });
+    }
   }
 
   if (document.readyState === "loading") {
