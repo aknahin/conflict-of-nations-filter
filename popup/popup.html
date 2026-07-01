@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Conflict of Nations Filter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="panel">
+      <header class="header">
+        <h1>Game filters</h1>
+        <p>Lower speed and days are hidden unless they meet the minimums. Player fill is capped at the maximum you set.</p>
+      </header>
+
+      <form id="filter-form" class="form">
+        <label>
+          <span>Minimum speed</span>
+          <input id="speed-min" type="number" min="0" step="1" inputmode="numeric" placeholder="Any" />
+        </label>
+
+        <label>
+          <span>Minimum days running</span>
+          <input id="days-running-min" type="number" min="0" step="1" inputmode="numeric" placeholder="Any" />
+        </label>
+
+        <label>
+          <span>Maximum player fill %</span>
+          <input id="player-fill-max" type="number" min="0" max="100" step="1" inputmode="numeric" placeholder="Any" />
+        </label>
+
+        <div class="actions">
+          <button type="submit">Save</button>
+        </div>
+
+        <p id="status" class="status" aria-live="polite"></p>
+      </form>
+    </main>
+
+    <script src="../shared/shared.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
