@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.DS_Store
+*.zip
+*.xpi
+html-page-sample.txt
